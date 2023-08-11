@@ -1,0 +1,12 @@
+{
+    "client_active": false,
+    "client_ssid": "",
+    "client_password": "",
+    "http_server_port": 2080,
+    "http_login": "admin",
+    "http_password": "admin",
+    "ws_enabled": false,
+    "ws_server": "",
+    "ntp_server": "0.pool.ntp.org",
+    "ntp_offset": 7
+}
