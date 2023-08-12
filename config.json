@@ -1,8 +1,8 @@
 {
+    "name": "NODE_ESP8266_x1000",
     "client": {
-        "enable": false,
-        "ssid": "",
-        "password": ""
+        "ssid": "Test",
+        "password": "12345678"
     },
     "http_server": {
         "port": 2080,

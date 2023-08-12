@@ -43,20 +43,23 @@ def timestamp_to_readable(timestamp):
     return year, month, day, hour, minute, second
 
 class rtc():
-    def __init__(self, ntpserver="0.pool.ntp.org", offset=0):
+    def __init__(self, config):
         self.ds3231 = DS3231(I2C(scl=Pin(5), sda=Pin(4)))
-        self.ntpserver = ntpserver
-        self.utc_offset = offset
+        self.ntpserver = config["server"]
+        self.timezone = config["timezone"]
         print("RTC initialized")
 
-    def get_time(self):
+    def now(self):
         return self.ds3231.datetime()
+    
+    def set(self, year, month, day, hour, minute, second):
+        self.ds3231.datetime((year, month, day, hour, minute, second, 0, 0))
 
-    def sync_time(self):
+    def sync(self):
         print("Syncing RTC with NTP server...")
         try:
             t = RequestTimefromNtp(self.ntpserver)
         except: return False
-        t += self.utc_offset * 3600
+        t += self.timezone * 3600
         self.ds3231.datetime(timestamp_to_readable(t))
         return True
