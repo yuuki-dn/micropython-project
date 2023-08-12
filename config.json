@@ -1,12 +1,42 @@
 {
-    "client_active": false,
-    "client_ssid": "",
-    "client_password": "",
-    "http_server_port": 2080,
-    "http_login": "admin",
-    "http_password": "admin",
-    "ws_enabled": false,
-    "ws_server": "",
-    "ntp_server": "0.pool.ntp.org",
-    "ntp_offset": 7
+    "client": {
+        "enable": false,
+        "ssid": "",
+        "password": ""
+    },
+    "http_server": {
+        "port": 2080,
+        "username": "admin",
+        "password": "admin"
+    },
+    "ws": {
+        "enable": false,
+        "server": ""
+    },
+    "ntp": {
+        "server": "0.pool.ntp.org",
+        "timezone": 0
+    },
+    "gate": {
+        "D5": {
+            "enable": true,
+            "name": "Gate 1 [D5]",
+            "reverse": false
+        },
+        "D6": {
+            "enable": true,
+            "name": "Gate 2 [D6]",
+            "reverse": false
+        },
+        "D7": {
+            "enable": true,
+            "name": "Gate 3 [D7]",
+            "reverse": false
+        },
+        "D8": {
+            "enable": true,
+            "name": "Gate 4 [D8]",
+            "reverse": false
+        }
+    }
 }

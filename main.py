@@ -8,12 +8,21 @@ from hashlib import sha256
 from utils.rtc import rtc
 from utils.wifi import wifi
 
+gate_pin = {
+    "D5": 14,
+    "D6": 12,
+    "D7": 13,
+    "D8": 15,
+}
+
 class gate():
-    def __init__(self):
-        self.pin = machine.Pin(13, machine.Pin.OUT)
-        self.reverse = True
+    def __init__(self, gate, name = "", reverse = True):
+        self.name = f"Gate_{gate_pin[gate]}" if name == "" else name
+        self.pin = machine.Pin(gate_pin[gate], machine.Pin.OUT)
+        self.reverse = reverse
         self.open = False
         if self.reverse: self.pin.value(1)
+        print(f"Gate {self.name} (Pin: {gate_pin[gate]}) initialized")
         
     def on(self):
         if self.reverse: self.pin.value(0)
@@ -31,13 +40,23 @@ class gate():
 
 class config():
     def __init__(self):
-        if "usrconf.json" in os.listdir("conf"):
+        if "config.json" in os.listdir():
             with open("config.json", "r") as f:
                 self.config = json.loads(f.read())
+        
         else:
-            with open("conf/conf.json", "w") as f:
-                self.config = {}
-                f.write(json.dumps(self.config))
+            self.config = {
+                            "client": {"enable": False, "ssid": "", "password": ""},
+                            "http_server": {"port": 2080, "username": "admin", "password": "admin"},
+                            "ws": {"enable": False, "server": ""},
+                            "ntp": {"server": "0.pool.ntp.org", "timezone": 0},
+                            "gate": {
+                                "D5": {"enable": True, "name": "Gate 1 [D5]", "reverse": False},
+                                "D6": {"enable": True, "name": "Gate 2 [D6]", "reverse": False},
+                                "D7": {"enable": True, "name": "Gate 3 [D7]", "reverse": False},
+                                "D8": {"enable": True, "name": "Gate 4 [D8]", "reverse": False}
+                            }
+                        }
         print("Configurations loaded")
     
     def get(self, key, alt=None):
@@ -48,7 +67,7 @@ class config():
     
     def set(self, key, value):
         self.config[key] = value
-        with open("conf/usrconf.json", "w") as f:
+        with open("config.json", "w") as f:
             f.write(json.dumps(self.config))
 
 class system():
