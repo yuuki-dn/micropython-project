@@ -1,37 +1,11 @@
 # main.py -- put your code here!
-import uasyncio as asyncio
-import machine
+import uasyncio
 import json
 import os
 from hashlib import sha256
 
-from utils.rtc import rtc
-from utils.wifi import wifi
-
-gate_pin = {"D5": 14, "D6": 12, "D7": 13, "D8": 15}
-
-class gate():
-    def __init__(self, gate, name = "", reverse = True):
-        self.name = f"Gate_{gate_pin[gate]}" if name == "" else name
-        self.pin = machine.Pin(gate_pin[gate], machine.Pin.OUT)
-        self.reverse = reverse
-        self.open = False
-        if self.reverse: self.pin.value(1)
-        print(f"Gate {self.name} (Pin: {gate_pin[gate]}) initialized")
-        
-    def on(self):
-        if self.reverse: self.pin.value(0)
-        else: self.pin.value(1)
-        self.open = True
-    
-    def off(self):
-        if self.reverse: self.pin.value(1)
-        else: self.pin.value(0)
-        self.open = False
-    
-    def toggle(self):
-        if self.open: self.off()
-        else: self.on()
+from ext.rtc import rtc
+from ext.wifi import wifi
 
 class config():
     def __init__(self):
@@ -76,7 +50,7 @@ class system():
     async def startup(self):
         print(f"Starting {self.name} v{self.version}...")
         while True:
-            await asyncio.sleep(10)
+            await uasyncio.sleep(10)
 
 _system = system()
-asyncio.run(_system.startup())
+uasyncio.run(_system.startup())
