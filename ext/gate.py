@@ -46,7 +46,7 @@ class gate():
         uasyncio.create_task(self.daemon())
 
     def save(self):
-        with open(f"schedule/schedule_{self.gate}.json", "w") as f:
+        with open(f"schedule_{self.gate}.json", "w") as f:
             f.write(json.dumps(self.schedule))
 
     def __repr__(self) -> str:
@@ -62,9 +62,10 @@ class gate():
         else: self.pin.value(0)
         self.open = False
     
-    def manual(self, mode, time=0):
+    def manual(self, mode, time=-1):
         if mode not in ["on", "off"]: return
         self.req = {"mode": mode, "time": time}
+        print(f"Gate {self.name} (Pin: {gate_pin[self.gate]}) set to {mode} {'for ' + str(time) + ' seconds' if time != -1 else ''}")
     
     def set(self, start, end, type="daily"):
         if type == "daily":

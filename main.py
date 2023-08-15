@@ -6,6 +6,9 @@ from hashlib import sha256
 
 from ext.rtc import rtc
 from ext.wifi import wifi
+from ext.gate import gate
+
+print("\n\n")
 
 class config():
     def __init__(self):
@@ -15,8 +18,7 @@ class config():
             print("Loaded user configurations")
         
         else:
-            self.config: dict = {
-                "name": "NODE_ESP8266_x1000",
+            self.config = {
                 "client": {"ssid": "Test", "password": "12345678"},
                 "http_server": {"port": 2080, "username": "admin", "password": "admin"},
                 "ws": {"enable": False, "server": ""},
@@ -29,7 +31,7 @@ class config():
                 }
             }
             print("Loaded default configurations")
-
+    
     def save(self):
         with open("config.json", "w") as f:
             f.write(json.dumps(self.config))
@@ -37,20 +39,30 @@ class config():
 class system():
     def __init__(self):
         self.config = config()
-
-        self.name = self.config.get("name")
+        self.name = "NODE_ESP8266_x1000"
         self.version = "1.0.0"
         self.id = "10000011"
         self.api_secret = "sec_jio982jf8h32d798yo8hed981_x1000"
 
         self.gate = []
-        self.rtc = rtc(self.config["ntp"])
-        self.wifi = wifi(self.name, self.config["client"])
+        self.rtc = rtc(self.config.config["ntp"])
+        self.wifi = wifi(self.name, self.config.config["client"])
+
+        for pin in self.config.config["gate"]:
+            if self.config.config["gate"][pin]["enable"]:
+               _ = gate(pin, self.rtc.now, self.config.config["gate"][pin]["name"], self.config.config["gate"][pin]["reverse"])
+               self.gate.append(_)
     
     async def startup(self):
         print(f"Starting {self.name} v{self.version}...")
         while True:
+            self.gate[0].manual("on")
+            await uasyncio.sleep(10)
+            self.gate[0].manual("off")
             await uasyncio.sleep(10)
 
 _system = system()
-uasyncio.run(_system.startup())
+
+loop = uasyncio.get_event_loop()
+loop.run_until_complete(_system.startup())
+loop.close()

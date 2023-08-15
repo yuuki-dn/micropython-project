@@ -8,8 +8,8 @@ class wifi():
         self.client = network.WLAN(network.STA_IF)
         self.client.active(True)
         self.fallback = network.WLAN(network.AP_IF)
-        self.fallback.config(ssid=f"[Fallback] {name}", security=4, key=name)
-
+        try: self.fallback.config(ssid=f"[Fallback] {name}", security=4, key=name)
+        except: pass
         self.client_up = False
         self.client_ip = None
         self.reconnect_flag = True

@@ -45,7 +45,13 @@ def timestamp_to_readable(timestamp):
     second = hms % 60
     return year, month, day, hour, minute, second
 
-def readable_to_timestamp(year, month, day, hour, minute, second):
+def readable_to_timestamp(datetime):
+    year = datetime[0]
+    month = datetime[1]
+    day = datetime[2]
+    hour = datetime[3]
+    minute = datetime[4]
+    second = datetime[5]
     timestamp = 0
     for i in range(year - 1970):
         if i % 4 == 0: timestamp += 31622400
@@ -64,6 +70,7 @@ class rtc():
         self.ds3231 = DS3231(I2C(scl=Pin(5), sda=Pin(4)))
         self.ntpserver = config["server"]
         self.timezone = config["timezone"]
+        self.set(2023, 1, 1, 0, 0, 0)
         print("RTC initialized")
     
     def set(self, year, month, day, hour, minute, second):
@@ -72,7 +79,7 @@ class rtc():
     async def sync(self):
         print("Syncing RTC with NTP server...")
         try:
-            t = await RequestTimefromNtp(self.ntpserver)
+            t = await uasyncio.wait_for_ms(RequestTimefromNtp(self.ntpserver), 2500)
         except: return False
         t += self.timezone * 3600
         self.ds3231.datetime(timestamp_to_readable(t))
