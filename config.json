@@ -1,42 +1,9 @@
 {
-    "name": "NODE_ESP8266_x1000",
-    "client": {
-        "ssid": "Test",
-        "password": "12345678"
-    },
-    "http_server": {
-        "port": 2080,
-        "username": "admin",
-        "password": "admin"
-    },
-    "ws": {
-        "enable": false,
-        "server": ""
-    },
-    "ntp": {
-        "server": "0.pool.ntp.org",
-        "timezone": 0
-    },
-    "gate": {
-        "D5": {
-            "enable": true,
-            "name": "Gate 1 [D5]",
-            "reverse": false
-        },
-        "D6": {
-            "enable": true,
-            "name": "Gate 2 [D6]",
-            "reverse": false
-        },
-        "D7": {
-            "enable": true,
-            "name": "Gate 3 [D7]",
-            "reverse": false
-        },
-        "D8": {
-            "enable": true,
-            "name": "Gate 4 [D8]",
-            "reverse": false
-        }
-    }
+    "wifi_ssid": "June8th",
+    "wifi_password": "21204846",
+    "timezone": 7,
+    "webpassword": "00001101",
+    "blynk_server": "iot.june8th.us.to",
+    "blynk_port": 8080,
+    "authtoken": ""
 }
